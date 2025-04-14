@@ -1,4 +1,4 @@
-# Chat app Project
+# Chat app project in Java
 ## Description
 This app is....
 ### LOGO
