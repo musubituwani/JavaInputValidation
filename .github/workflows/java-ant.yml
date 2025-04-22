@@ -23,10 +23,15 @@ jobs:
       - name: Verify Ant is installed
         run: ant -version
         shell: cmd
-
-      - name: Build with Ant
-        run: ant
+        
+      - name: Print files in project
+        run: dir /s
         shell: cmd
+
+      - name: Build with Ant (verbose)
+        run: ant -verbose
+        shell: cmd
+
 
       - name: Run Tests (if you have test target)
         run: ant test
