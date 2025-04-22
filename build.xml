@@ -21,7 +21,7 @@
 </target>
 
 <target name="compile" depends="init">
-    <javac srcdir="mysql" destdir="build/classes"
+    <javac srcdir="src/mysql" destdir="build/classes"
            classpathref="project.classpath"
            includeantruntime="false"/>
 </target>
