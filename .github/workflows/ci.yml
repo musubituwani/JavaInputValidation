@@ -12,7 +12,7 @@ env:
 jobs:
   setup:
     name: Setup Job
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     outputs:
       should-run-next: ${{ steps.check.outputs.continue }}
     steps:
@@ -45,7 +45,7 @@ jobs:
   test:
     name: Matrix Test Job
     needs: build
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     strategy:
       matrix:
         java: [8, 11, 17]
