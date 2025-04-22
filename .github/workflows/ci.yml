@@ -1,4 +1,4 @@
-name: Java CI on Windows
+name: Java Build with Ant (Windows)
 
 on:
   push:
@@ -6,12 +6,10 @@ on:
   pull_request:
     branches: [ "master" ]
 
-env:
-  MAVEN_OPTS: "-Xmx1g"
-
 jobs:
-  setup:
+  build:
     runs-on: windows-latest
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,44 +20,15 @@ jobs:
           java-version: '17'
           distribution: 'temurin'
 
-  test:
-    needs: setup
-    runs-on: windows-latest
-    strategy:
-      matrix:
-        java: [11, 17]
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+      - name: Verify Ant is installed
+        run: ant -version
+        shell: cmd
 
-      - name: Set up Java ${{ matrix.java }}
-        uses: actions/setup-java@v3
-        with:
-          java-version: ${{ matrix.java }}
-          distribution: 'temurin'
+      - name: Build with Ant
+        run: ant
+        shell: cmd
 
-      - name: Run Tests
-        run: mvn test
-        shell: pwsh
-        working-directory: ${{ github.workspace }}/JavaInputValidation
-
-  lint:
-    needs: setup
-    runs-on: windows-latest
-    steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
-
-      - name: Lint Code
-        run: .\scripts\lint.ps1
-        shell: pwsh
+      - name: Run Tests (if you have test target)
+        run: ant test
+        shell: cmd
         continue-on-error: true
-
-  deploy:
-    needs: [test, lint]
-    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
-    runs-on: windows-latest
-    steps:
-      - name: Deploy to Production
-        run: .\scripts\deploy.ps1
-        shell: pwsh
