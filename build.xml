@@ -8,6 +8,10 @@
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
 <project name="MySQL" default="default" basedir=".">
+    <classpath>
+      <pathelement path="lib/mysql-connector-j-9.2.0.jar"/>
+    </classpath>
+
     <description>Builds, tests, and runs the project MySQL.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
