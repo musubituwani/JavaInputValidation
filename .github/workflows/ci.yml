@@ -1,56 +1,38 @@
-name: Control Flow Example
+name: Java CI on Windows
 
 on:
   push:
-    branches:
-      - master
+    branches: [ "master" ]
   pull_request:
+    branches: [ "master" ]
 
 env:
-  GLOBAL_ENV: "I am accessible everywhere"
+  MAVEN_OPTS: "-Xmx1g"
 
 jobs:
   setup:
-    name: Setup Job
     runs-on: windows-latest
-    outputs:
-      should-run-next: ${{ steps.check.outputs.continue }}
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
 
-      - name: Check whether to continue
-        id: check
-        run: |
-          echo "continue=true" >> $GITHUB_OUTPUT
-
-  build:
-    name: Conditional Build Job
-    needs: setup
-    if: needs.setup.outputs.should-run-next == 'true'
-    runs-on: ubuntu-latest
-    steps:
-      - name: Echo environment variable
-        run: echo "GLOBAL_ENV is $GLOBAL_ENV"
-
-      - name: Setup JDK
+      - name: Set up Java
         uses: actions/setup-java@v3
         with:
           java-version: '17'
           distribution: 'temurin'
 
-      - name: Build with Maven
-        run: mvn clean install
-
   test:
-    name: Matrix Test Job
-    needs: build
+    needs: setup
     runs-on: windows-latest
     strategy:
       matrix:
-        java: [8, 11, 17]
+        java: [11, 17]
     steps:
-      - name: Setup JDK ${{ matrix.java }}
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Java ${{ matrix.java }}
         uses: actions/setup-java@v3
         with:
           java-version: ${{ matrix.java }}
@@ -58,13 +40,25 @@ jobs:
 
       - name: Run Tests
         run: mvn test
+        shell: pwsh
 
-  notify:
-    name: Notify on Success
-    needs: [test]
-    if: ${{ success() }}
+  lint:
+    needs: setup
     runs-on: windows-latest
     steps:
-      - name: Send success message
-        run: echo "✅ All jobs completed successfully!"
+      - name: Checkout code
+        uses: actions/checkout@v4
 
+      - name: Lint Code
+        run: .\scripts\lint.ps1
+        shell: pwsh
+        continue-on-error: true
+
+  deploy:
+    needs: [test, lint]
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+    runs-on: windows-latest
+    steps:
+      - name: Deploy to Production
+        run: .\scripts\deploy.ps1
+        shell: pwsh
