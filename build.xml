@@ -16,8 +16,14 @@
     </fileset>
 </path>
 
+<target name="init">
+    <mkdir dir="build/classes"/>
+</target>
+
 <target name="compile" depends="init">
-    <javac srcdir="." destdir="build/classes" classpathref="project.classpath" includeantruntime="false"/>
+    <javac srcdir="mysql" destdir="build/classes"
+           classpathref="project.classpath"
+           includeantruntime="false"/>
 </target>
 
     <description>Builds, tests, and runs the project MySQL.</description>
