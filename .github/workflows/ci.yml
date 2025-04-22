@@ -41,7 +41,7 @@ jobs:
       - name: Run Tests
         run: mvn test
         shell: pwsh
-        working-directory: ${{ github.workspace }}
+        working-directory: ${{ github.workspace }}/JavaInputValidation
 
   lint:
     needs: setup
