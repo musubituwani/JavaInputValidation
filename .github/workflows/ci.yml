@@ -63,7 +63,7 @@ jobs:
     name: Notify on Success
     needs: [test]
     if: ${{ success() }}
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
     steps:
       - name: Send success message
         run: echo "✅ All jobs completed successfully!"
