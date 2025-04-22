@@ -7,11 +7,15 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<path id="project.class.path">
-  <fileset dir="lib">
-    <include name="**/*.jar"/>
-  </fileset>
+<path id="project.classpath">
+    <fileset dir="lib">
+        <include name="*.jar"/>
+    </fileset>
 </path>
+
+<target name="compile" depends="init">
+    <javac srcdir="." destdir="build/classes" classpathref="project.classpath" includeantruntime="false"/>
+</target>
 
 <project name="MySQL" default="default" basedir=".">
     
