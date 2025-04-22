@@ -1,4 +1,4 @@
-name: Java Build with Ant (Windows)
+name: Java Build with Ant (Windows).
 
 on:
   push:
