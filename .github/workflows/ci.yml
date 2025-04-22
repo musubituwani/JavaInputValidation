@@ -41,6 +41,7 @@ jobs:
       - name: Run Tests
         run: mvn test
         shell: pwsh
+        working-directory: D:\a\JavaInputValidation\JavaInputValidation
 
   lint:
     needs: setup
